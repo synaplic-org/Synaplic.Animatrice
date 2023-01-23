@@ -12,7 +12,7 @@ using Synaplic.Inventory.Infrastructure.Contexts;
 namespace Synaplic.Inventory.Infrastructure.Migrations
 {
     [DbContext(typeof(UniContext))]
-    [Migration("20221205142946_00001")]
+    [Migration("20230123132415_00001")]
     partial class _00001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,181 +105,337 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                     b.ToTable("UserTokens", "Identity");
                 });
 
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventoryScan", b =>
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Affectation", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Animatrice")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("CodeArticle")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DatePeremption")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DeletedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NumLot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumSerie")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("QuantiteStock")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<DateTime>("ScanTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("InventoryScan", (string)null);
-                });
-
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventorySession", b =>
-                {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PointVente")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateDebut")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateDebutPrevisionnel")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateFin")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DepotId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Designation")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Filtre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Log")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InventorySession", (string)null);
+                    b.ToTable("Affectation", (string)null);
                 });
 
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventoryStock", b =>
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Animatrice", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Code")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Adresse")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("CodeArticle")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Intitule")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Region")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime>("DateExclusion")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Tel")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Designation")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
+                    b.HasKey("Code")
+                        .HasName("PK__Animatri__A25C5AA69CF1A603");
 
-                    b.Property<string>("ExcludeBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.ToTable("Animatrice", (string)null);
+                });
 
-                    b.Property<bool>("Exclure")
-                        .HasColumnType("bit");
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Article", b =>
+                {
+                    b.Property<string>("ArCodeBarre")
+                        .HasMaxLength(19)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(19)")
+                        .HasColumnName("AR_CodeBarre");
+
+                    b.Property<string>("ArDesign")
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)")
+                        .HasColumnName("AR_Design");
+
+                    b.Property<string>("ArRef")
+                        .IsRequired()
+                        .HasMaxLength(19)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(19)")
+                        .HasColumnName("AR_Ref");
+
+                    b.Property<short?>("ArSommeil")
+                        .HasColumnType("smallint")
+                        .HasColumnName("AR_Sommeil");
+
+                    b.Property<short?>("ArSuiviStock")
+                        .HasColumnType("smallint")
+                        .HasColumnName("AR_SuiviStock");
+
+                    b.Property<string>("FaCodeFamille")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(11)")
+                        .HasColumnName("FA_CodeFamille");
 
                     b.Property<string>("Famille")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)");
 
-                    b.Property<string>("JusftifEcart")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Laboratoire")
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)");
 
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.ToTable("Article", (string)null);
+                });
 
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Authentification", b =>
+                {
+                    b.Property<string>("Login")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("login_");
 
-                    b.Property<string>("NumLot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumSerie")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("QuantiteInventaire")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<decimal>("QuantiteMouvement")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<decimal>("QuantiteStock")
-                        .HasColumnType("decimal(18,6)");
-
-                    b.Property<int>("SessionId")
+                    b.Property<int?>("Active")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValeurInventaire")
-                        .HasColumnType("decimal(18,6)");
+                    b.Property<string>("Animatrice")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<decimal>("ValeurStock")
-                        .HasColumnType("decimal(18,6)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Intitule")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("intitule");
 
-                    b.HasIndex("SessionId");
+                    b.Property<string>("Password")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("Password_");
 
-                    b.ToTable("InventoryStock", (string)null);
+                    b.HasKey("Login")
+                        .HasName("PK__Authenti__94F8E94881F02FB9");
+
+                    b.HasIndex("Animatrice");
+
+                    b.ToTable("Authentification", (string)null);
+                });
+
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Echantillon", b =>
+                {
+                    b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Numero"), 1L, 1);
+
+                    b.Property<string>("Animatrice")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Article")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Client")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("client");
+
+                    b.Property<string>("Commentaire")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("DateCreation")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DateEchantillon")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DateModification")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("Prix")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal?>("Qte")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.HasKey("Numero")
+                        .HasName("PK__Echantil__7E532BC7AB3EC903");
+
+                    b.ToTable("Echantillon", (string)null);
+                });
+
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.PointVente", b =>
+                {
+                    b.Property<string>("CtAdresse")
+                        .HasMaxLength(35)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(35)")
+                        .HasColumnName("CT_Adresse");
+
+                    b.Property<string>("CtIntitule")
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)")
+                        .HasColumnName("CT_Intitule");
+
+                    b.Property<string>("CtNum")
+                        .IsRequired()
+                        .HasMaxLength(17)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(17)")
+                        .HasColumnName("CT_Num");
+
+                    b.Property<string>("CtTelephone")
+                        .HasMaxLength(21)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(21)")
+                        .HasColumnName("CT_Telephone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)");
+
+                    b.ToTable("PointVente", (string)null);
+                });
+
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Vente", b =>
+                {
+                    b.Property<int>("Numero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Numero"), 1L, 1);
+
+                    b.Property<string>("Animatrice")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Article")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("CategorieClient")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Client")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("client");
+
+                    b.Property<string>("Commentaire")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("DateCreation")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DateModification")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("DateVente")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("Prix")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<decimal?>("Qte")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("Type_");
+
+                    b.HasKey("Numero")
+                        .HasName("PK__Ventes__7E532BC78BAFD2F0");
+
+                    b.ToTable("Ventes");
+                });
+
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.VwVenteGl", b =>
+                {
+                    b.Property<string>("Animatrice")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("animatrice");
+
+                    b.Property<string>("Article")
+                        .HasMaxLength(170)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(170)");
+
+                    b.Property<string>("Commentaire")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<DateTime?>("DateVente")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Famille")
+                        .HasMaxLength(69)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(69)");
+
+                    b.Property<long>("IdNum")
+                        .HasColumnType("bigint")
+                        .HasColumnName("idNum");
+
+                    b.Property<string>("PointVente")
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal?>("Qte")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.ToView("vwVenteGl");
                 });
 
             modelBuilder.Entity("Synaplic.Inventory.Infrastructure.Models.Audit.Audit", b =>
@@ -557,28 +713,14 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventoryScan", b =>
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Authentification", b =>
                 {
-                    b.HasOne("Synaplic.Inventory.Domain.Entities.Inventory.InventorySession", "InventorySession")
-                        .WithMany("InventoryScans")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_InventorySession_Scans");
+                    b.HasOne("Synaplic.Inventory.Domain.Entities.Animatrice", "AnimatriceNavigation")
+                        .WithMany("Authentifications")
+                        .HasForeignKey("Animatrice")
+                        .HasConstraintName("FK__Authentif__Anima__6A30C649");
 
-                    b.Navigation("InventorySession");
-                });
-
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventoryStock", b =>
-                {
-                    b.HasOne("Synaplic.Inventory.Domain.Entities.Inventory.InventorySession", "InventorySession")
-                        .WithMany("InventoryStocks")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_InventorySession_Stocks");
-
-                    b.Navigation("InventorySession");
+                    b.Navigation("AnimatriceNavigation");
                 });
 
             modelBuilder.Entity("Synaplic.Inventory.Infrastructure.Models.Identity.UniRoleClaim", b =>
@@ -592,11 +734,9 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Inventory.InventorySession", b =>
+            modelBuilder.Entity("Synaplic.Inventory.Domain.Entities.Animatrice", b =>
                 {
-                    b.Navigation("InventoryScans");
-
-                    b.Navigation("InventoryStocks");
+                    b.Navigation("Authentifications");
                 });
 
             modelBuilder.Entity("Synaplic.Inventory.Infrastructure.Models.Identity.UniRole", b =>

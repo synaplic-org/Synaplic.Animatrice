@@ -204,38 +204,6 @@
             <param name="languageCode"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.Save(Synaplic.Inventory.Transfer.Models.SessionDTO)">
-            <summary>
-            Add session
-            </summary>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.Delete(System.Int32)">
-            <summary>
-            Delete session
-            </summary> s
-            <param name="id"></param>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetById(System.Int32)">
-            <summary>
-            Get session
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetAll">
-            <summary>
-            Get All Sessions
-            </summary>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetByStatus(Synaplic.Inventory.Shared.Enums.SessionStatus)">
-            <summary>
-            Get All Sessions
-            </summary>
-            <returns>Status 200 OK</returns>
-        </member>
         <member name="M:Synaplic.Inventory.Server.Controllers.v1.SageController.GetAllDepots">
             <summary>
             Get Dashboard Data

@@ -13,6 +13,52 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                 name: "Identity");
 
             migrationBuilder.CreateTable(
+                name: "Affectation",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Animatrice = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    PointVente = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Animatrice",
+                columns: table => new
+                {
+                    Code = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Intitule = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Adresse = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Tel = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Region = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Animatri__A25C5AA69CF1A603", x => x.Code);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Article",
+                columns: table => new
+                {
+                    Laboratoire = table.Column<string>(type: "varchar(69)", unicode: false, maxLength: 69, nullable: true),
+                    Famille = table.Column<string>(type: "varchar(69)", unicode: false, maxLength: 69, nullable: true),
+                    FA_CodeFamille = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: false),
+                    AR_Ref = table.Column<string>(type: "varchar(19)", unicode: false, maxLength: 19, nullable: false),
+                    AR_Design = table.Column<string>(type: "varchar(69)", unicode: false, maxLength: 69, nullable: true),
+                    AR_Sommeil = table.Column<short>(type: "smallint", nullable: true),
+                    AR_SuiviStock = table.Column<short>(type: "smallint", nullable: true),
+                    AR_CodeBarre = table.Column<string>(type: "varchar(19)", unicode: false, maxLength: 19, nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AuditTrails",
                 columns: table => new
                 {
@@ -33,27 +79,38 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventorySession",
+                name: "Echantillon",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Numero = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Designation = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    DateDebut = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateDebutPrevisionnel = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateFin = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    DepotId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Filtre = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Log = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Article = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    client = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Qte = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
+                    Prix = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
+                    Commentaire = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    DateEchantillon = table.Column<DateTime>(type: "date", nullable: true),
+                    Animatrice = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    DateCreation = table.Column<DateTime>(type: "date", nullable: true),
+                    DateModification = table.Column<DateTime>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventorySession", x => x.Id);
+                    table.PrimaryKey("PK__Echantil__7E532BC7AB3EC903", x => x.Numero);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PointVente",
+                columns: table => new
+                {
+                    CT_Num = table.Column<string>(type: "varchar(17)", unicode: false, maxLength: 17, nullable: false),
+                    CT_Intitule = table.Column<string>(type: "varchar(69)", unicode: false, maxLength: 69, nullable: true),
+                    CT_Adresse = table.Column<string>(type: "varchar(35)", unicode: false, maxLength: 35, nullable: true),
+                    Email = table.Column<string>(type: "varchar(69)", unicode: false, maxLength: 69, nullable: true),
+                    CT_Telephone = table.Column<string>(type: "varchar(21)", unicode: false, maxLength: 21, nullable: true)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -118,68 +175,47 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventoryScan",
+                name: "Ventes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SessionId = table.Column<int>(type: "int", nullable: false),
-                    CodeArticle = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
-                    QuantiteStock = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    NumLot = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NumSerie = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DatePeremption = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ScanTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Numero = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Article = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    client = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Qte = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
+                    Prix = table.Column<decimal>(type: "decimal(18,0)", nullable: true),
+                    Commentaire = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    DateVente = table.Column<DateTime>(type: "date", nullable: true),
+                    Animatrice = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Type_ = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    DateCreation = table.Column<DateTime>(type: "date", nullable: true),
+                    CategorieClient = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    DateModification = table.Column<DateTime>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventoryScan", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InventorySession_Scans",
-                        column: x => x.SessionId,
-                        principalTable: "InventorySession",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK__Ventes__7E532BC78BAFD2F0", x => x.Numero);
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventoryStock",
+                name: "Authentification",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SessionId = table.Column<int>(type: "int", nullable: false),
-                    CodeArticle = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
-                    Designation = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
-                    Famille = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: true),
-                    QuantiteInventaire = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    QuantiteStock = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    QuantiteMouvement = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    ValeurInventaire = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    ValeurStock = table.Column<decimal>(type: "decimal(18,6)", nullable: false),
-                    JusftifEcart = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Exclure = table.Column<bool>(type: "bit", nullable: false),
-                    DateExclusion = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExcludeBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NumLot = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NumSerie = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    login_ = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Password_ = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    intitule = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    Animatrice = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Active = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventoryStock", x => x.Id);
+                    table.PrimaryKey("PK__Authenti__94F8E94881F02FB9", x => x.login_);
                     table.ForeignKey(
-                        name: "FK_InventorySession_Stocks",
-                        column: x => x.SessionId,
-                        principalTable: "InventorySession",
-                        principalColumn: "Id");
+                        name: "FK__Authentif__Anima__6A30C649",
+                        column: x => x.Animatrice,
+                        principalTable: "Animatrice",
+                        principalColumn: "Code");
                 });
 
             migrationBuilder.CreateTable(
@@ -306,14 +342,9 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_InventoryScan_SessionId",
-                table: "InventoryScan",
-                column: "SessionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InventoryStock_SessionId",
-                table: "InventoryStock",
-                column: "SessionId");
+                name: "IX_Authentification_Animatrice",
+                table: "Authentification",
+                column: "Animatrice");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -365,13 +396,22 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Affectation");
+
+            migrationBuilder.DropTable(
+                name: "Article");
+
+            migrationBuilder.DropTable(
                 name: "AuditTrails");
 
             migrationBuilder.DropTable(
-                name: "InventoryScan");
+                name: "Authentification");
 
             migrationBuilder.DropTable(
-                name: "InventoryStock");
+                name: "Echantillon");
+
+            migrationBuilder.DropTable(
+                name: "PointVente");
 
             migrationBuilder.DropTable(
                 name: "RoleClaims",
@@ -394,7 +434,10 @@ namespace Synaplic.Inventory.Infrastructure.Migrations
                 schema: "Identity");
 
             migrationBuilder.DropTable(
-                name: "InventorySession");
+                name: "Ventes");
+
+            migrationBuilder.DropTable(
+                name: "Animatrice");
 
             migrationBuilder.DropTable(
                 name: "Roles",

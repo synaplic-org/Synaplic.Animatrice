@@ -21,28 +21,28 @@ namespace Synaplic.Inventory.Server
             {
                 var services = scope.ServiceProvider;
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                try
-                {
+                //try
+                //{
                      
 
-                    var context = services.GetRequiredService<UniContext>();
+                //    //var context = services.GetRequiredService<UniContext>();
                     
 
-                    if (context.Database.IsSqlServer())
-                    {
-                        context.Database.Migrate();
-                    }
+                //    //if (context.Database.IsSqlServer())
+                //    //{
+                //    //    context.Database.Migrate();
+                //    //}
                     
-                    //var bydContext = services.GetRequiredService<IBydesignService>();
-                    //await bydContext.IntegrateFile(10, "PROJECTS_V0508 HackLab.xlsx");
-                    //return;
+                //    //var bydContext = services.GetRequiredService<IBydesignService>();
+                //    //await bydContext.IntegrateFile(10, "PROJECTS_V0508 HackLab.xlsx");
+                //    //return;
 
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
-                    throw;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+                //    throw;
+                //}
             }
 
             await host.RunAsync();

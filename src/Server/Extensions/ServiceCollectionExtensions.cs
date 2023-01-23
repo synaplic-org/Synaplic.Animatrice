@@ -48,11 +48,11 @@ using Synaplic.Inventory.Infrastructure.Sage.Configurations;
 using Synaplic.Inventory.Infrastructure.Sage.Repositories;
 using Synaplic.Inventory.Infrastructure.Sage.Manager;
 using Synaplic.Inventory.Infrastructure.Sage.Service;
-using Synaplic.Inventory.Infrastructure.Services.v1.Inventory;
 using Synaplic.Inventory.Shared.Interfaces.Serialization.Options;
 using Synaplic.Inventory.Infrastructure.Services.Date;
 using Synaplic.Inventory.Shared.Interfaces.Serialization.Serializers;
 using Synaplic.Inventory.Shared.Interfaces.Serialization.Settings;
+using Synaplic.Inventory.Infrastructure.Services.v1.Inventory;
 
 namespace Synaplic.Inventory.Server.Extensions
 {

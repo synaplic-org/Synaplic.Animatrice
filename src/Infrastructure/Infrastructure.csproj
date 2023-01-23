@@ -49,5 +49,9 @@
     <ProjectReference Include="..\Infrastructure.Sage\Infrastructure.Sage.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Services\v1\Inventory\" />
+  </ItemGroup>
 
 </Project>

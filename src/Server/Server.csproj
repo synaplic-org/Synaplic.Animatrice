@@ -60,6 +60,7 @@
     <ProjectReference Include="..\Transfer\Transfer.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controllers\v1\Inventory\" />
     <Folder Include="Files\Logs" />
   </ItemGroup>
 

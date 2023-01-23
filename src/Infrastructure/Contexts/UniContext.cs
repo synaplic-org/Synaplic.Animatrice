@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Synaplic.Inventory.Domain.Entities;
-using Synaplic.Inventory.Domain.Entities.Inventory;
 using Synaplic.Inventory.Infrastructure.Contexts;
 
 namespace Synaplic.Inventory.Infrastructure.Contexts
@@ -18,13 +17,20 @@ namespace Synaplic.Inventory.Infrastructure.Contexts
         {
         }
 
- 
+
+
+        public virtual DbSet<Affectation> Affectations { get; set; }
+        public virtual DbSet<Animatrice> Animatrices { get; set; }
+        public virtual DbSet<Article> Articles { get; set; }
+        public virtual DbSet<Authentification> Authentifications { get; set; }
+        public virtual DbSet<Echantillon> Echantillons { get; set; }
+        public virtual DbSet<PointVente> PointVentes { get; set; }
+        public virtual DbSet<Vente> Ventes { get; set; }
+        public virtual DbSet<VwVenteGl> VwVenteGls { get; set; }
 
 
 
-        public DbSet<InventorySession> InventorySessions { get; set; }
-        public DbSet<InventoryScan> InventoryScans { get; set; }
-        public DbSet<InventoryStock> InventoryStocks { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,56 +38,270 @@ namespace Synaplic.Inventory.Infrastructure.Contexts
             OnIdentityModelCreating(modelBuilder);
 
 
-
-
-            modelBuilder.Entity<InventorySession>(entity =>
+            modelBuilder.Entity<Affectation>(entity =>
             {
-                entity.ToTable("InventorySession");
-                //entity.Property(e => e.DateDebut).HasColumnType("DateTime2");
-                //entity.Property(e => e.DateDebutPrevisionnel).HasColumnType("DateTime2");
-                //entity.Property(e => e.DateFin).HasColumnType("DateTime2");
+                entity.HasNoKey();
 
-                entity.Property(e => e.Designation).HasMaxLength(250);
+                entity.ToTable("Affectation");
 
-                entity.Property(e => e.Status)
+                entity.Property(e => e.Animatrice)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.PointVente)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Animatrice>(entity =>
+            {
+                entity.HasKey(e => e.Code)
+                    .HasName("PK__Animatri__A25C5AA69CF1A603");
+
+                entity.ToTable("Animatrice");
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Adresse)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Intitule)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Region)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tel)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Article");
+
+                entity.Property(e => e.ArCodeBarre)
+                    .HasMaxLength(19)
+                    .IsUnicode(false)
+                    .HasColumnName("AR_CodeBarre");
+
+                entity.Property(e => e.ArDesign)
+                    .HasMaxLength(69)
+                    .IsUnicode(false)
+                    .HasColumnName("AR_Design");
+
+                entity.Property(e => e.ArRef)
                     .IsRequired()
-                    .HasColumnType("int");
+                    .HasMaxLength(19)
+                    .IsUnicode(false)
+                    .HasColumnName("AR_Ref");
+
+                entity.Property(e => e.ArSommeil).HasColumnName("AR_Sommeil");
+
+                entity.Property(e => e.ArSuiviStock).HasColumnName("AR_SuiviStock");
+
+                entity.Property(e => e.FaCodeFamille)
+                    .IsRequired()
+                    .HasMaxLength(11)
+                    .IsUnicode(false)
+                    .HasColumnName("FA_CodeFamille");
+
+                entity.Property(e => e.Famille)
+                    .HasMaxLength(69)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Laboratoire)
+                    .HasMaxLength(69)
+                    .IsUnicode(false);
             });
 
-
-            modelBuilder.Entity<InventoryStock>(entity =>
+            modelBuilder.Entity<Authentification>(entity =>
             {
-                entity.ToTable("InventoryStock");
+                entity.HasKey(e => e.Login)
+                    .HasName("PK__Authenti__94F8E94881F02FB9");
 
-                entity.Property(e => e.CodeArticle).HasMaxLength(70);
-                entity.Property(e => e.Designation).HasMaxLength(70);
-                entity.Property(e => e.Famille).HasMaxLength(70);
+                entity.ToTable("Authentification");
 
-               
+                entity.Property(e => e.Login)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("login_");
 
-                entity.HasOne(d => d.InventorySession)
-                    .WithMany(p => p.InventoryStocks)
-                    .HasForeignKey(d => d.SessionId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_InventorySession_Stocks");
+                entity.Property(e => e.Animatrice)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
+                entity.Property(e => e.Email).HasMaxLength(50);
 
+                entity.Property(e => e.Intitule)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("intitule");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Password_");
+
+                entity.HasOne(d => d.AnimatriceNavigation)
+                    .WithMany(p => p.Authentifications)
+                    .HasForeignKey(d => d.Animatrice)
+                    .HasConstraintName("FK__Authentif__Anima__6A30C649");
             });
 
-            modelBuilder.Entity<InventoryScan>(entity =>
+            modelBuilder.Entity<Echantillon>(entity =>
             {
-                entity.ToTable("InventoryScan");
+                entity.HasKey(e => e.Numero)
+                    .HasName("PK__Echantil__7E532BC7AB3EC903");
 
-                entity.Property(e => e.CodeArticle).HasMaxLength(70);
+                entity.ToTable("Echantillon");
 
-                entity.HasOne(d => d.InventorySession)
-                    .WithMany(p => p.InventoryScans)
-                    .HasForeignKey(d => d.SessionId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .HasConstraintName("FK_InventorySession_Scans");
+                entity.Property(e => e.Animatrice)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
+                entity.Property(e => e.Article)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
+                entity.Property(e => e.Client)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("client");
+
+                entity.Property(e => e.Commentaire).IsUnicode(false);
+
+                entity.Property(e => e.DateCreation).HasColumnType("date");
+
+                entity.Property(e => e.DateEchantillon).HasColumnType("date");
+
+                entity.Property(e => e.DateModification).HasColumnType("date");
+
+                entity.Property(e => e.Prix).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Qte).HasColumnType("decimal(18, 0)");
             });
+
+            modelBuilder.Entity<PointVente>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("PointVente");
+
+                entity.Property(e => e.CtAdresse)
+                    .HasMaxLength(35)
+                    .IsUnicode(false)
+                    .HasColumnName("CT_Adresse");
+
+                entity.Property(e => e.CtIntitule)
+                    .HasMaxLength(69)
+                    .IsUnicode(false)
+                    .HasColumnName("CT_Intitule");
+
+                entity.Property(e => e.CtNum)
+                    .IsRequired()
+                    .HasMaxLength(17)
+                    .IsUnicode(false)
+                    .HasColumnName("CT_Num");
+
+                entity.Property(e => e.CtTelephone)
+                    .HasMaxLength(21)
+                    .IsUnicode(false)
+                    .HasColumnName("CT_Telephone");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(69)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Vente>(entity =>
+            {
+                entity.HasKey(e => e.Numero)
+                    .HasName("PK__Ventes__7E532BC78BAFD2F0");
+
+                entity.Property(e => e.Animatrice)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Article)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CategorieClient)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Client)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("client");
+
+                entity.Property(e => e.Commentaire).IsUnicode(false);
+
+                entity.Property(e => e.DateCreation).HasColumnType("date");
+
+                entity.Property(e => e.DateModification).HasColumnType("date");
+
+                entity.Property(e => e.DateVente).HasColumnType("date");
+
+                entity.Property(e => e.Prix).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Qte).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasColumnName("Type_");
+            });
+
+            modelBuilder.Entity<VwVenteGl>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwVenteGl");
+
+                entity.Property(e => e.Animatrice)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("animatrice");
+
+                entity.Property(e => e.Article)
+                    .HasMaxLength(170)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Commentaire).IsUnicode(false);
+
+                entity.Property(e => e.DateVente).HasColumnType("date");
+
+                entity.Property(e => e.Famille)
+                    .HasMaxLength(69)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IdNum).HasColumnName("idNum");
+
+                entity.Property(e => e.PointVente)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Qte).HasColumnType("decimal(18, 0)");
+            });
+
+
 
 
             OnModelCreatingPartial(modelBuilder);
