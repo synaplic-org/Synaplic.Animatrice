@@ -1,0 +1,198 @@
+﻿@page "/Logistics/Invenotry/Sessions/Ecarts/{sessionId}"
+
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+    .mud-table-cell {
+        display: table-cell;
+        padding: 12px;
+        font-size: .65rem;
+        text-align: start;
+        font-weight: 600;
+        line-height: 1.2;
+        border-top: 1px solid var(--mud-palette-table-lines);
+        border-bottom: 0px;
+ 
+    }
+    
+     
+    .mud-toolbar {
+        height: 48px;
+    }
+</style>
+
+<HeroTitle Title="@(Localizer["Rapportd des écarts : "] + _mySession.Designation)" Description="@(Localizer["Dépot : "] + GetDepotName(_mySession.DepotId))"/>
+<MudPaper Elevation="25">
+    <MudToolBar Style="border-bottom: #9e39a7 2px solid;padding: 0px">
+
+
+        <MudButton DisableElevation Variant="Variant.Filled" OnClick="GenerateEcartDetails"
+                   Disabled="_isLoading" Class="mx-1"
+                   StartIcon="@Icons.Material.Filled.SyncAlt" IconColor="Color.Surface"
+                   Color="Color.Primary">
+            @Localizer["Générer"]
+        </MudButton>
+
+        <MudButton DisableElevation Variant="Variant.Filled" OnClick="GenerateEcartDetails"
+                   Disabled="true" Class="mx-1"
+                   StartIcon="@Icons.Material.Filled.SyncAlt" IconColor="Color.Surface"
+                   Color="Color.Transparent">
+            @Localizer["Valoriser"]
+        </MudButton>
+
+        <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetAllStockAsync"
+                   Disabled="_isLoading" Class="mx-1"
+                   StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface"
+                   Color="Color.Secondary">
+            @Localizer["Actualiser"]
+        </MudButton>
+        <MudSpacer/>
+
+        <MudButton DisableElevation Variant="Variant.Filled" Class="mx-2"
+                   Disabled="true" Style="background: #894a89"
+                   StartIcon="@Icons.Material.Filled.SyncAlt" IconColor="Color.Surface"
+                   Color="Color.Dark">
+            @Localizer["Intégrer"]
+        </MudButton>
+    </MudToolBar>
+</MudPaper>
+<MudTable Hover="true" Elevation="3" Items="_filtredScanListe" Dense="true" Bordered="false" Striped="false"
+          Filter="new Func<StockDTO, bool>(Search)"
+          Loading="_isLoading">
+    <ToolBarContent>
+        <div class="justify-center mud-text-align-center">
+            <MudRadioGroup T="int" SelectedOptionChanged="i => FilterGrid(i)">
+                <MudRadio Option="0" Color="Color.Primary">Tout</MudRadio>
+                <MudRadio Option="1" Color="Color.Error">Ecarts</MudRadio>
+                <MudRadio Option="2" Color="Color.Warning">Mouvements</MudRadio>
+                <MudRadio Option="3" Color="Color.Dark">Exclus</MudRadio>
+            </MudRadioGroup>
+        </div>
+        <MudSpacer/>
+        @if (_canSearchSession)
+        {
+            <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false Placeholder="@Localizer["Rechercher ..."]" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        }
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.Id)">@Localizer["Id"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.CodeArticle)">@Localizer["Code article"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.Designation)">@Localizer["Designation"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.Famille)">@Localizer["Famille"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.QuantiteStock)">@Localizer["Qte Théorique"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.QuantiteInventaire)">@Localizer["Qte Scanée"]</MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.NumLot)">@Localizer["Numero Lot"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.EcartStock)">@Localizer["Ecart"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.QuantiteMouvement)">@Localizer["Mvm postérieur"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<StockDTO, object>(x => x.ValeurInventaire)">@Localizer["Prix.U"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh Style="text-align:right">@Localizer["Actions"]</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="ID">
+            @if (context.Exclure)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"></MudIconButton>
+            }
+
+            @context.Id
+        </MudTd>
+        <MudTd DataLabel="Code article" HighlightedText="@_searchString">
+            <MudHighlighter Text="@context.CodeArticle"/>
+        </MudTd>
+        <MudTd DataLabel="Designation" HighlightedText="@_searchString">
+            <MudHighlighter Text="@context.Designation"/>
+        </MudTd>
+        <MudTd DataLabel="Famille" HighlightedText="@_searchString">
+            <MudHighlighter Text="@context.Famille"/>
+        </MudTd>
+        <MudTd DataLabel="Qte Théorique" Style="text-align: right">
+            @context.QuantiteStock.ToString("N2")
+        </MudTd>
+        <MudTd DataLabel="Qte Scanée" Style="text-align: right">
+            @context.QuantiteInventaire.ToString("N2")
+        </MudTd>
+        <MudTd DataLabel="Numero Lot" Style="text-align: right">
+            @context.NumLot
+        </MudTd>
+        <MudTd DataLabel="Ecart" Style="text-align: right">
+            @if (context.EcartStock != 0)
+            {
+                <p style="color:red;font-weight: bolder"> @context.EcartStock.ToString("N2")</p>
+            }
+            else
+            {
+                @context.EcartStock.ToString("N2")
+            }
+        </MudTd>
+        <MudTd DataLabel="Mvm postérieur" Style="text-align: right">
+            @context.QuantiteMouvement.ToString("N2")
+        </MudTd>
+        <MudTd DataLabel="Prix.U" Style="text-align: right">
+            <MudTextField T="decimal" Variant="Variant.Text" Margin="Margin.Dense"
+                          Value="@context.ValeurUnitaire"
+                          ValueChanged="(s) => UpdatePrice(context, s)"/>
+        </MudTd>
+        <MudTd DataLabel="@Localizer["Actions"]" Style="text-align: right">
+
+            <MudButtonGroup Color="Color.Transparent" Variant="Variant.Outlined">
+                @if (_canEditSession && context.Exclure == false)
+                {
+                    <MudIconButton Title="Exclure" Icon="@Icons.Material.Filled.LinkOff" Color="@Color.Error"
+                                   @onclick="@(() => ExcludeStock(@context))"/>
+                }
+                else
+                {
+                    <MudIconButton Title="Inclure" Icon="@Icons.Material.Filled.AddLink" Color="@Color.Primary"
+                                   @onclick="@(() => ExcludeStock(@context))"/>
+                }
+
+
+            </MudButtonGroup>
+
+
+        </MudTd>
+    </RowTemplate>
+    <ChildRowContent>
+        @if (context.EcartStock != 0)
+        {
+              <MudTr>
+                        <td></td>
+                        <td colspan="4">
+                            <MudTextField T="string" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                          Value="@context.JusftifEcart"
+                                          ValueChanged="(s) => UpdateJustification(context, s)"
+                                          Style="font-size: 0.65rem" Label="@(Localizer["Justification d'écart"] + ": " + context.CodeArticle)"/>
+                        </td>
+                        <td colspan="4"></td>
+                    </MudTr>
+        }
+      
+    </ChildRowContent>
+
+    <PagerContent>
+        <TablePager/>
+    </PagerContent>
+</MudTable>

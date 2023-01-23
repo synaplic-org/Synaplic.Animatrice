@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Synaplic.Inventory.Transfer</RootNamespace>
+    <AssemblyName>Synaplic.Inventory.Transfer</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Command\**" />
+    <Compile Remove="Features\**" />
+    <Compile Remove="Requests\Inetgration\**" />
+    <EmbeddedResource Remove="Command\**" />
+    <EmbeddedResource Remove="Features\**" />
+    <EmbeddedResource Remove="Requests\Inetgration\**" />
+    <None Remove="Command\**" />
+    <None Remove="Features\**" />
+    <None Remove="Requests\Inetgration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.3.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Features\" />
+    <Folder Include="Resources\Validators\Features\" />
+    <Folder Include="Validators\Features\" />
+  </ItemGroup>
+
+</Project>

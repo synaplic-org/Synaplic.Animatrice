@@ -1,0 +1,236 @@
+﻿@page "/Home"
+@using System.Security.Claims
+
+
+
+<style>
+
+    .HomeButton {
+        height: calc(100% - 0px);
+        padding: 4px
+    }
+
+    .HomeButtonCard {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+    <table style="height:calc(100vh - 116px);width:calc(100% - 6px);overflow: scroll;">
+
+
+        <tr style="height: 16%;max-height: 16%">
+            <td colspan="2">
+
+                @if (_canInventory)
+                {
+                    <MudButton FullWidth="true" OnClick="@(() =>  _navigationManager.NavigateTo($"/Logistics/Mobile/Sessions"))" Class="HomeButton">
+                    <MudCard Class="HomeButtonCard" Style="border-left:10px solid #83b774">
+                            <MudCardHeader>
+                                <CardHeaderAvatar>
+                                  <MudIcon Style="color:#83b774" Size="Size.Large"
+                                                                               Icon="@Icons.TwoTone.AutoAwesomeMosaic">
+                                                                      </MudIcon>
+                                </CardHeaderAvatar>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h5">@Localizer["Inventaire"]</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                        </MudCard>
+                    </MudButton>
+                }
+            </td>
+        </tr>
+
+
+        <tr style="height: 16%;max-height: 16%">
+            <td colspan="2">
+                @if (_canViewStock)
+                {
+                <MudButton FullWidth="true" OnClick="@(() =>  _navigationManager.NavigateTo("/Logistics/Mobile/Stock/Current"))" Class="HomeButton">
+                    <MudCard Class="HomeButtonCard" Style="border-left:10px solid #4387ca">
+                            <MudCardHeader>
+                                <CardHeaderAvatar>
+                                   
+                                                   <MudIcon Style="color:#4387ca" Size="Size.Large"
+                                                              Icon="@Icons.TwoTone.Category">
+                                                                                       </MudIcon>             
+                                </CardHeaderAvatar>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h5">@Localizer["Stock"]</MudText>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+                        </MudCard>
+                    </MudButton>
+                }
+            </td>
+        </tr>
+
+        <tr style="height: 16%;max-height: 16%">
+            <td colspan="2">
+                
+            </td>
+        </tr>
+
+        <tr style="height: 16%;max-height: 16%">
+            <td colspan="2">
+                
+            </td>
+        </tr>
+
+
+
+        <tr style="height: 16%;max-height: 16%">
+            <td colspan="2">
+                
+            </td>
+        </tr>
+
+
+
+    </table>
+
+
+    <div style="margin-bottom: 53px"></div>
+    <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1"  Class="footerbar">
+    <MudIconButton Icon="@Icons.Material.Filled.Logout" Style="background-color: #db0c0c;color: white;transform: rotateZ(180deg);height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="@(LogoutApp)" />
+    <MudIconButton Disabled="isLoading" Icon="@Icons.Material.Filled.Sync" Class="ml-6" Style="background-color: green;color: white;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="SyncAllData">
+            @if (isLoading)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            }
+
+
+        </MudIconButton>
+
+        <MudSpacer />
+    <MudIconButton Disabled="isLoading" Icon="@Icons.Material.Filled.Settings" Class="mr-0" Style="background-color: #456688;color: white;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="ShowSettings" />
+
+        @*<MudMenu Disabled="isLoading" Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+            <ActivatorContent>
+                <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Dark" Edge="Edge.End" Style="border: 2px solid #8a99a9" />
+            </ActivatorContent>
+            <ChildContent>
+
+                
+                <MudListItem Disabled="isLoading" Text="@Localizer["Stock"]" Icon="@Icons.Material.Filled.Category"
+                         OnClick="ShowStock" />
+                 
+
+
+            </ChildContent>
+        </MudMenu>*@
+    </MudAppBar>
+
+
+@code {
+    private ClaimsPrincipal _authenticationStateProviderUser;
+
+   
+
+    bool _canInventory, _canViewStock;
+    bool _isMobile;
+    protected override async Task OnParametersSetAsync()
+    {
+
+        _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
+        _isMobile = (_authenticationStateProviderUser.GetUserType() == UserType.Mobile.ToString());
+
+        //if (_isMobile)
+        //{
+        //	_navigationManager.NavigateTo($"/Logistics/Mobile/Sessions");
+        //}else
+        //{
+        //	//_navigationManager.NavigateTo($"/Logistics/Invenotry/Sessions");
+        //}
+
+
+
+        _canInventory = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Inventory.ViewSession)).Succeeded;
+        _canViewStock = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Inventory.ViewStock)).Succeeded;
+         
+
+        //if (!_canShowHome)
+        //{
+        //	_navigationManager.NavigateTo($"/identity/users");
+        //}
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+    }
+    private void ManagePermissions()
+    {
+        _navigationManager.NavigateTo($"/Inbound");
+    }
+
+    private async Task LogoutApp()
+    {
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        if (user == null) return;
+        var parameters = new DialogParameters
+        {
+            {nameof(LogoutDialog.ContentText), $"{Localizer["Confirmation"]}"},
+            {nameof(LogoutDialog.ButtonText), $"{Localizer["Se déconnecter"]}"},
+            {nameof(LogoutDialog.Color), Color.Error},
+            {nameof(LogoutDialog.CurrentUserId), user.GetUserId()},
+			//{nameof(Logout.HubConnection), hubConnection}
+		};
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+        _dialogService.Show<LogoutDialog>(Localizer["Logout"], parameters, options);
+    }
+
+    private bool isLoading;
+    private bool _canShowHome;
+
+    private async Task SyncAllData()
+    {
+        SetLoading(true);
+        //var response = await logisticsManager.GlobalSyncronization();
+        //if (response.Succeeded)
+        //{
+
+
+
+        //}
+        //else
+        //{
+        //    foreach (var message in response.Messages)
+        //    {
+        //        _snackBar.Add(message, Severity.Error);
+        //    }
+
+        //}
+        SetLoading(false);
+    }
+
+    private void SetLoading(bool val)
+    {
+        isLoading = val;
+        StateHasChanged();
+    }
+
+
+    private void ShowSettings()
+    {
+        _navigationManager.NavigateTo($"/account");
+    }
+
+    private void ShowAbout()
+    {
+
+    }
+
+    private void ShowStock()
+    {
+        _navigationManager.NavigateTo($"/StockOverview");
+    }
+
+}

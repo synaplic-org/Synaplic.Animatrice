@@ -1,0 +1,53 @@
+﻿@using System.Globalization
+@using Synaplic.Inventory.Transfer.SageModels
+
+
+<div style="height:calc(100vh - 110px); overflow-y: scroll;">
+
+    @foreach (var i in Articles.Take(100).ToList())
+    {
+        <MudPaper Elevation="3" @onclick="() => SelectArticle(i)"  class="pa-1 mt-2" Style="border-left: solid 4px darkslategray" >
+                 
+            <MudText Typo="Typo.subtitle2" style="color:#0a5291">
+                @i.Designation
+            </MudText>
+           
+            <table style="width: 100%">
+                <tr><td colspan="2">
+                    <b>@Localizer["Code :"]</b> @i.CodeArticle
+                </td></tr>
+                <tr><td colspan="2">
+                    <b>@Localizer["Famille :"]</b> @i.CodeFamille
+                    </td><td style="text-align: center">
+                      @*  <strong style="color:#9e39a7">
+                            Qte: @i.SumScannedQte.ToString("N2")
+                        </strong>*@
+                    </td>
+                    </tr>
+            </table>
+                
+               
+        </MudPaper>
+            
+    }
+
+</div>
+
+@code {
+    
+
+    [Parameter] public List<SageArticleDTO> Articles { get; set; }
+
+
+    [Parameter] public EventCallback<SageArticleDTO> ArticleSelected { get; set; }
+
+    private int count = 0;
+
+   
+
+    private async Task SelectArticle(SageArticleDTO sageArticleDto)
+    {
+        await ArticleSelected.InvokeAsync(sageArticleDto);
+    }
+
+}

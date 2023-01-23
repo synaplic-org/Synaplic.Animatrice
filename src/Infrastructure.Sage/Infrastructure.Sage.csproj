@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Synaplic.Inventory.Infrastructure.Sage</RootNamespace>
+		<AssemblyName>Synaplic.Inventory.Infrastructure.Sage</AssemblyName>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Queries\Sage100c5\COLLABORATEUR\SELECT_COLLABORATEUR_MIN.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTCILE_ISACTIF.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTICLE.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTICLE_BY_FAMILLE.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTICLE_MIN_BY_ID.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTICLE_PAR_DEPOT.Sql" />
+	  <None Remove="Queries\Sage100\ARTICLE\SELECT_ARTICLE_PAR_DEPOT_BY_ID.Sql" />
+	  <None Remove="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR.Sql" />
+	  <None Remove="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR_BY_ID.Sql" />
+	  <None Remove="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR_MIN.Sql" />
+	  <None Remove="Queries\Sage100\DEPOT\SELECT_DEPOT.Sql" />
+	  <None Remove="Queries\Sage100\FAMILLE\SELECT_FAMILLE.Sql" />
+	  <None Remove="Queries\Template.Sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Queries\Sage100c5\COLLABORATEUR\SELECT_COLLABORATEUR_MIN.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTCILE_ISACTIF.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTICLE_BY_FAMILLE.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTICLE.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTICLE_MIN_BY_ID.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTICLE_PAR_DEPOT.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\ARTICLE\SELECT_ARTICLE_PAR_DEPOT_BY_ID.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR_BY_ID.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\COLLABORATEUR\SELECT_COLLABORATEUR_MIN.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\DEPOT\SELECT_DEPOT.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\FAMILLE\SELECT_FAMILLE.Sql" />
+	  <EmbeddedResource Include="Queries\Sage100\STOCK\STOCK_A_DATE_BY_DEPOT.Sql" />
+	  <EmbeddedResource Include="Queries\Template.Sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Shared\Shared.csproj" />
+	  <ProjectReference Include="..\Transfer\Transfer.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Dapper" Version="2.0.123" />
+	  <PackageReference Include="Serilog" Version="2.10.0" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+	</ItemGroup>
+
+</Project>

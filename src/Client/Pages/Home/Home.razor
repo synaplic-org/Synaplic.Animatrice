@@ -1,0 +1,42 @@
+﻿@page "/"
+
+@code {
+
+    bool _isMobile;
+
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+
+            var _authenticationStateProviderUser = await _stateProvider.GetAuthenticationStateProviderUserAsync();
+            _isMobile = (_authenticationStateProviderUser.GetUserType() == UserType.Mobile.ToString());
+
+            var _canview = false;
+            if (_isMobile)
+            {
+                _canview = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Inventory.ViewSession)).Succeeded;
+                if (_canview)
+
+                    _navigationManager.NavigateTo($"/Logistics/Mobile/Sessions");
+
+
+            }
+            else
+            {
+                _canview = (await _authorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Inventory.ViewSession)).Succeeded;
+                if (_canview)
+                    _navigationManager.NavigateTo($"/Logistics/Invenotry/Sessions");
+            }
+
+            if (!_canview)
+            {
+                _navigationManager.NavigateTo($"/AccessDesnied");
+            }
+        }
+    }
+
+}

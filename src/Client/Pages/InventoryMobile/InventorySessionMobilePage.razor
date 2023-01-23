@@ -1,0 +1,181 @@
+﻿@page "/Logistics/Mobile/Sessions"
+@using System.Net.Http.Json
+@using static MudBlazor.CategoryTypes
+
+ 
+@layout NoAppBarLayout
+
+<style>
+
+
+	    
+			tbody tr:nth-child(odd) {
+				background-color: #fff;
+			
+			}
+			tbody tr:nth-child(even) {
+				background-color: #fff;
+			}
+
+	.mud-table-cell {
+		font-weight: bold;
+		font-size: small;
+	}
+
+	.mud-table-sort-label{
+		font-weight: bolder;
+		font-size:medium;
+	}
+
+	.mud-badge-unsigned{
+		background-color: #ebcf7c;
+		color:white;
+	}
+	 
+</style>
+
+<MudAppBar Elevation="5" Dense="true" Style="border-top: solid 2px #191919;">
+
+    
+        <MudText Typo="Typo.h6" Class="ml-2">@Localizer["Session Liste"] </MudText>
+    
+    <MudSpacer/>
+
+
+    <MudIconButton Disabled="_loading" Icon="@Icons.Material.Filled.Refresh" Size="Size.Medium" Style="background-color: white;color: green;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="Refresh"/>
+</MudAppBar>
+<div style="margin-top: 50px"></div>
+
+
+
+
+@*
+<MudPaper Elevation="3" Style="margin-bottom:5px;">
+
+
+    <div class="mud-toolbar mud-toolbar-gutters mud-table-toolbar" style="border-left:10px  #d04512">
+        <MudIconButton DisableElevation Variant="Variant.Outlined" Icon="@Icons.Material.Filled.QrCode" Color="Color.Primary" OnClick="OpenScanner" Style="margin-right:4px;"></MudIconButton>
+        <MudTextField @bind-Value="_searchString" @ref="scaninput" Immediate="true" FullWidth=false Placeholder="@Localizer["Scan for inbound task"]" Class="mt-0 mb-3"></MudTextField>
+        <MudIconButton DisableElevation Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Clear" Color="Color.Secondary" OnClick="LoadData" Style="margin-right:4px;"></MudIconButton>
+    </div>
+
+
+</MudPaper>
+*@
+
+<div style="height:calc(100vh - 120px); overflow-y:scroll">
+
+
+    <MudTabs Centered="true" @ref="tabs" Rounded="false" Style="font-size: small;" Class="p3" ActivePanelIndexChanged="FocusScanInput">
+        <MudTabPanel Text="En cours">
+            <MudPaper Style="border-top:solid 6px #72d488">
+                <MudTable Class="mytasks" T="SessionDTO" Items="_mytaskList" Hover="false" Breakpoint="Breakpoint.None"
+                          Filter="new Func<SessionDTO, bool>(Search)"
+                          Dense="true"
+                          Loading="@_loading" LoadingProgressColor="Color.Info"
+                          Style="background-color: #e6f1f8;">
+                    <HeaderContent>
+
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Id)">Id</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Designation)">Session</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+
+                    <RowTemplate >
+
+                        <MudTd DataLabel="Id">@context.Id</MudTd>
+                        <MudTd DataLabel="type">
+
+
+                               @Localizer[context.Designation]
+                     
+
+                        </MudTd>
+
+                        
+                        
+                        
+                         <MudTd Style="text-align: right">
+                                                    @if (_canOpenSession)
+                                                    {
+                                                        <MudIconButton Disabled="_loading"
+                                                                       Color="Color.Secondary" Icon="@Icons.Material.Outlined.AppRegistration" Size="Size.Large"
+                                                                       Style="height: 46px;width: 46px;margin: 0px"
+                                                                       Edge="Edge.End"
+                                                                       OnClick="(() => OpenTask(context))"/>
+                                                    }
+                                                </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudPaper>
+        </MudTabPanel>
+
+        <MudTabPanel Text="En attente">
+            <MudPaper Style="border-top:solid 6px #ebcf7c">
+                <MudTable Class="unassignedtas" Items="_unassignedtaskList" Hover="false"
+                          Breakpoint="Breakpoint.None"
+                          Filter="new Func<SessionDTO, bool>(Search)"
+                          Loading="@_loading" LoadingProgressColor="Color.Info"
+                          Dense="true"
+                          Style="background-color: #fff7dc;">
+                    <HeaderContent>
+
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Id)">Id</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Designation)">Session</MudTableSortLabel>
+                        </MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+
+                    <RowTemplate>
+
+                        <MudTd DataLabel="Id">@context.Id</MudTd>
+                        <MudTd DataLabel="type">
+                               @Localizer[context.Designation]
+                           
+
+                        </MudTd>
+
+                        <MudTd Style="text-align: right">
+                            @if (_canOpenSession)
+                            {
+                                <MudIconButton Disabled="_loading"
+                                               Color="Color.Primary" Icon="@Icons.Material.Filled.PlayCircleOutline" Size="Size.Large"
+                                               Style="height: 46px;width: 46px;margin: 0px"
+                                               Edge="Edge.End"
+                                               OnClick="(() => OpenSessionAsync(context))"/>
+                            }
+                        </MudTd>
+
+
+                    </RowTemplate>
+                </MudTable>
+            </MudPaper>
+        </MudTabPanel>
+
+    </MudTabs>
+
+
+</div>
+<div style="margin-bottom: 53px"></div>
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Class="footerbar" Elevation="1" >
+    <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn" Style="background-color: orange;color: white;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="@(BackToParent)"/>
+    
+<MudSpacer/>
+    <MudTextField @bind-Value="_searchString" @ref="scaninput" Immediate="true" Clearable="true" FullWidth="true" Placeholder="@Localizer["Rechercher"]" 
+                  AdornmentIcon="@Icons.Material.Filled.FilterAlt" Adornment="Adornment.Start" Class="mx-6 mb-5"></MudTextField>
+   
+    <MudIconButton Disabled="_loading" Icon="@Icons.Material.Filled.QrCode2" 
+                   Class="" Style="background-color: #1E88E5;color: white;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="ScanBarCode"/>
+
+    
+</MudAppBar>

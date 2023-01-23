@@ -1,0 +1,118 @@
+﻿@page "/Logistics/Invenotry/Sessions/Details/{sessionId}"
+
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+    
+     .mud-table-cell {
+                display: table-cell;
+                padding: 12px;
+                font-size: .75rem;
+                text-align: start;
+                font-weight: 600;
+                line-height: 1.2;
+         
+            }
+            .mud-toolbar {
+                height: 48px;
+            }
+</style>
+
+<HeroTitle Title="@(Localizer["Detail scan : "] + _mySession.Designation)" Description="@(Localizer["Dépot : "] + GetDepotName(_mySession.DepotId))"/>
+
+<MudTable Hover="true" Elevation="25" Items="_allScanListe" Dense="@_dense" Bordered="@_bordered" Striped="@_striped" 
+           Filter="new Func<ScanDTO, bool>(Search)"
+          Loading="_isLoading">
+    <ToolBarContent>
+        <div class="justify-center mud-text-align-center">
+            @if (_mySession.Status == SessionStatus.Terminee)
+            {
+                  <MudButton DisableElevation Variant="Variant.Filled" OnClick="ShowEcartDetails" Class="mr-2"
+                                       Disabled="_isLoading"
+                                       StartIcon="@Icons.Material.Filled.SyncAlt" IconColor="Color.Surface"
+                                       Color="Color.Primary">@Localizer["Rapport des écarts"]</MudButton>
+
+            }
+          
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetAllScansAsync"
+                       Disabled="_isLoading"
+                       StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface"
+                       Color="Color.Secondary">@Localizer["Actualiser"]</MudButton>
+        </div>
+        <MudSpacer/>
+        @if (_canSearchSession)
+        {
+            <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false Placeholder="@Localizer["Rechercher des scans"]" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        }
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.CodeArticle)">@Localizer["Code article"]</MudTableSortLabel>
+        </MudTh>
+         <MudTh>
+                    <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.QuantiteStock)">@Localizer["Quantité"]</MudTableSortLabel>
+                </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.ScanTime)">@Localizer["Date scan"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.CreatedBy)">@Localizer["Opérateur"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.Deleted)">@Localizer["Supprimé"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.DeletedTime)">@Localizer["Date suppression"]</MudTableSortLabel>
+        </MudTh>
+        <MudTh Style="text-align:right">@Localizer["Actions"]</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Code article" HighlightedText="@_searchString">
+            
+            <MudHighlighter Text="@context.CodeArticle" />
+        </MudTd>
+        <MudTd DataLabel="Date scan">
+                  @context.QuantiteStock.ToString("N")
+                </MudTd>
+        <MudTd DataLabel="Date scan">
+          @context.ScanTime
+        </MudTd>
+        <MudTd DataLabel="Operateur">
+            @GetUserName(context.CreatedBy)
+        </MudTd>
+        <MudTd DataLabel="Supprimé">
+            @if (context.Deleted)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"></MudIconButton>
+            }
+
+        </MudTd>
+
+        <MudTd DataLabel="Operateur">
+            @if (context.DeletedTime != DateTime.MinValue)
+            {
+                @context.DeletedTime
+            }
+           
+        </MudTd>
+
+        <MudTd DataLabel="@Localizer["Actions"]" Style="text-align: right">
+
+            <MudMenu Label="@Localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                @if (_mySession.Status.Equals(SessionStatus.Terminee) && _canEditSession)
+                {
+                    <MudMenuItem @onclick="@(() => DeleteScanDetails(@context))"> @Localizer["Supprimer"]</MudMenuItem>
+                }
+
+            </MudMenu>
+
+        </MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <TablePager/>
+    </PagerContent>
+</MudTable>
+ 

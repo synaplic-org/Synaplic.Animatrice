@@ -1,0 +1,1 @@
+﻿SELECT COUNT(AR_Ref) IsActif FROM dbo.F_ARTICLE Where AR_Sommeil = 0  AND  AR_Ref = @Reference 

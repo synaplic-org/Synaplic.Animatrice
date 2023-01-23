@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <RootNamespace>Synaplic.Inventory.Client</RootNamespace>
+    <AssemblyName>Synaplic.Inventory.Client</AssemblyName>
+    <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
+    <EmccTotalMemory>16777216</EmccTotalMemory>
+	<LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Modules\**" />
+    <Content Remove="Pages\Modules\**" />
+    <EmbeddedResource Remove="Pages\Modules\**" />
+    <None Remove="Pages\Modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Shared\Components\UniLogoUni.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.1" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+    <PackageReference Include="MudBlazor" Version="6.0.5" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client.Infrastructure\Client.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fonts\SAP-icons.woff2" />
+    <None Include="wwwroot\icons\safari-pinned-tab.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\Inventory\InventorySession.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

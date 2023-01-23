@@ -1,0 +1,218 @@
+@page "/Logistics/Mobile/Sessions/Details/{sessionId}"
+@using Synaplic.Inventory.Shared.Extensions
+@using Synaplic.Inventory.Transfer.SageModels
+
+@code {
+    private void Callback(SageArticleDTO obj)
+    {
+        throw new NotImplementedException();
+    }
+}
+@layout NoAppBarLayout
+
+@* =======HEADER======*@
+<MudAppBar Elevation="5" Dense="true" Style="border-top: solid 2px #191919;">
+
+    @if (!_isLoading)
+    {
+        <MudText Typo="Typo.h6" Class="ml-2"> Session [@(sessionId) - @(_mySession?.Designation ?? "")] </MudText>
+    }
+    else
+    {
+        <MudText Typo="Typo.h6" Class="ml-2"> @Localizer["Chargement"] .... </MudText>
+    }
+
+    <MudSpacer />
+
+    <MudIconButton Disabled="_isLoading"
+                   Icon="@Icons.TwoTone.Save" Size="Size.Medium"
+                   Style="background-color: white;color: #1347c7;height:40px;width:40px"
+                   Edge="Edge.Start"
+                   OnClick="SaveScans" />
+
+
+
+</MudAppBar>
+<div style="height: 48px">
+</div>
+
+@* =======BODY======*@
+
+
+@if (ShowListe)
+{
+    <InventoryArticleListe Articles="_articleFiltredListe" ArticleSelected="ArticleSelected" />
+}
+else
+
+{
+    <table style="width: 100%;">
+        <tr>
+
+            <td style="width: 40px">
+                <MudIconButton Disabled="_isLoading"
+                           Icon="@Icons.Material.Filled.QrCode2" Class="mx-0"
+                           Variant="Variant.Filled"
+                           Style="background-color: darkslategray;color: white;height:40px;width:40px" Edge="Edge.False"
+                           OnClick="ScanBarCode" />
+
+            </td>
+            <td>
+                <MudButton Disabled="_isLoading" Variant="Variant.Filled" Color="Color.Primary"
+                       Style="background-color:darkslategray" FullWidth="true" OnClick="FocusScanInput">
+                    @_currentSageArticle.CodeArticle
+                </MudButton>
+
+            </td>
+            <td style="width: 40px">
+                <MudFab @ref="_scanButton" Disabled="_isLoading" Color="Color.Secondary"
+                    StartIcon="@Icons.Material.Filled.Add"
+                    Size="Size.Small"
+                    Style="height: 40px;width: 40px;margin: 5px"
+                    OnClick="@(() => AddScan(_currentSageArticle.CodeArticle))" />
+            </td>
+
+
+        </tr>
+    </table>
+
+
+
+
+<MudPaper Elevation="3" class="pa-2 mt-1" Style="border-left: solid 4px darkslategray">
+    <div class="d-flex" style="max-height: 40px;height: 40px">
+        <MudText Typo="Typo.subtitle2" style="color:#0a5291">
+            @_currentSageArticle.Designation
+        </MudText>
+    </div>
+    <div class="d-flex" style="padding-right:4px">
+
+        <div class="d-flex ml-auto">
+
+            <MudText Typo="Typo.subtitle2" Class="mt-1">
+                <strong style="color:#9e39a7">
+                        Total Qte: @_currentSageArticle.SumScannedQte.ToString("N2")
+                </strong>
+
+            </MudText>
+        </div>
+
+    </div>
+</MudPaper>
+
+<MudPaper Elevation="3" class="pa-1 mt-1" style="height:calc(100vh - 260px); overflow-y:auto">
+    @if (_currentSageArticle != null)
+    {
+        <MudTable Class="unassignedtas" Items="_scanListe" Hover="true" Dense="true" Striped="true"
+              Breakpoint="Breakpoint.None"
+              Loading="@_isLoading" LoadingProgressColor="Color.Info">
+            <HeaderContent>
+
+                <MudTh>
+                    Scan
+                    @* <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.QuantiteStock)">Scan</MudTableSortLabel>*@
+                </MudTh>
+                <MudTh>
+                    Time
+                    @*  <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.ScanTime)">   </MudTableSortLabel>*@
+                </MudTh>
+                <MudTh>
+                   Lot/Serie
+                    @*  <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.ScanTime)">   </MudTableSortLabel>*@
+                </MudTh>
+                <MudTh>
+                   Date de peremption
+                    @*  <MudTableSortLabel SortBy="new Func<ScanDTO, object>(x => x.ScanTime)">   </MudTableSortLabel>*@
+                </MudTh>
+
+                <MudTh Style="text-align: right;height: 49px">
+
+
+                </MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd DataLabel="QuantiteStock"> @context.QuantiteStock.ToString("N2")</MudTd>
+                <MudTd DataLabel="type">
+                    @context.ScanTime.ToString("T")
+                </MudTd>
+                <MudTd DataLabel="type">
+                    @context.NumLot
+                </MudTd>
+                <MudTd DataLabel="type">
+
+                    @context.DatePeremption
+                </MudTd>
+                <MudTd Style="text-align: right;height: 49px">
+                    @if (context.CreatedBy == null)
+                    {
+                        <MudIconButton Disabled="_isLoading" Color="Color.Error" Icon="@Icons.Material.Filled.Delete"
+                               Class="m-0" Style=" height:36px;width:36px" Edge="Edge.Start" OnClick="() => DeleteScan(context)" />
+                    }
+
+
+                </MudTd>
+
+
+            </RowTemplate>
+        </MudTable>
+    }
+</MudPaper>
+
+}
+<div style="margin-bottom: 10px"></div>
+
+
+
+
+
+
+
+@* =======FOOTER======*@
+
+<div style="margin-bottom: 53px"></div>
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" Class="footerbar">
+    <MudIconButton Edge="Edge.Start" Icon="@Icons.Material.Filled.KeyboardReturn"
+                   OnClick="BackToParent" Style="background-color: orange;color: white;height:40px;width:40px" />
+
+
+    @*<MudTextField @bind-Value="_searchString" @ref="scaninput" Immediate="true" Clearable="true" FullWidth="true" Placeholder="@Localizer["Rechercher"]"
+    AdornmentIcon="@Icons.Material.Filled.FilterAlt" Adornment="Adornment.Start" ></MudTextField>*@
+
+    @*
+    <EditForm Model="@_scanedString" OnValidSubmit="ValueInputChanged">
+    *@
+    @if (ShowListe)
+    {
+            <MudTextField @ref="SearchInputText" T="string"
+                       ValueChanged="SearchArticle"
+                       DebounceInterval="500"
+                       TextUpdateSuppression="false"
+                       Variant="Variant.Text"
+                       Adornment="Adornment.Start"
+                       AdornmentIcon="@Icons.Filled.Search"
+                       Class="mx-6 mb-5" />
+
+    }
+    else
+    {
+        <MudTextField @ref="barcodeInputText" T="string"
+                  ValueChanged="ValueInputChanged"
+                  TextUpdateSuppression="false"
+                  Variant="Variant.Text"
+                  Adornment="Adornment.Start"
+                  AdornmentIcon="@Icons.Filled.Search"
+                  Class=" mx-6 mb-5" />
+    }
+
+
+
+    @*</EditForm>*@
+
+    <MudIconButton Disabled="_isLoading" Icon="@Icons.Material.Outlined.List" Size="Size.Medium"
+                   Style="background-color: #186bbd;color: white;height:44px;width:44px" Edge="Edge.Start"
+                   OnClick="ToggleSearch" />
+
+
+</MudAppBar>

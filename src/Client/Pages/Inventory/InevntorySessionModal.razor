@@ -1,0 +1,62 @@
+﻿
+<EditForm Model="@SessionModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (SessionModel.Id == 0)
+                {
+                        <MudText Typo="Typo.h6">
+                            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                            @Localizer["Ajouter une session"]
+                        </MudText>
+                }
+                else
+                {
+                        <MudText Typo="Typo.h6">
+                            <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                            @Localizer["Mettre à jour la session"]
+                        </MudText>
+                }
+            }
+        </TitleContent>
+        <DialogContent>
+            @if(SessionModel.Id != 0)
+            {
+                <MudTextField For="@(() => SessionModel.Id)" @bind-Value="SessionModel.Id" Label="@Localizer["Session ID"]" Disabled />
+            }
+            
+            <MudTextField For="@(() => SessionModel.Designation)" @bind-Value="SessionModel.Designation" Label="@Localizer["Designation"]" />
+            <MudDatePicker For="@(() => SessionModel.DateDebut)" @bind-Date="SessionModel.DateDebut" Label="@Localizer["Date Début"]" Editable="true" MinDate="DateTime.Now.AddDays(-15)"
+                           MaxDate="DateTime.Now.AddYears(1)" />
+            <MudDatePicker For="@(() => SessionModel.DateFin)" @bind-Date="SessionModel.DateFin" Label="@Localizer["Date Fin"]" Editable="true" MinDate="DateTime.Now.AddDays(-15)"
+                           MaxDate="DateTime.Now.AddYears(1)" />
+            <MudSelect For="@(() => SessionModel.DepotId)" T="string" @bind-Value="SessionModel.DepotId" Label="@Localizer["Depot"]" AnchorOrigin="Origin.BottomCenter">
+                 @foreach (var depot in _depotList )
+                 {
+                    <MudSelectItem T="string" Value="@depot.CodeDepot.ToString()"> @depot.Intitule</MudSelectItem>
+                 }
+            </MudSelect>
+            <MudSelect For="@(() => SessionModel.Filtre)" T="string" @bind-Value="SessionModel.Filtre" Label="@Localizer["Filtre"]" MultiSelection="true" SelectAll="true" SelectAllText="sélectionner tous" AnchorOrigin="Origin.BottomCenter">
+                
+                @foreach (var filtre in _familleList)
+                {
+                    <MudSelectItem T="string" Value="@filtre.CodeFamille">@filtre.Intitule</MudSelectItem>
+                }
+            </MudSelect>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Variant="Variant.Filled" OnClick="Cancel">@Localizer["Annuler"]</MudButton>
+            @{
+                if (SessionModel.Id == 0)
+                {
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">@Localizer["Sauvegarder la session"]</MudButton>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">@Localizer["Mettre à jour la session"]</MudButton>
+                }
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

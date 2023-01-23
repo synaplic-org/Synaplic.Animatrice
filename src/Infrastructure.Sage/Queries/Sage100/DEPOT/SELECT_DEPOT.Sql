@@ -1,0 +1,2 @@
+﻿select DE_No CodeDepot,DE_Intitule Intitule, DE_Adresse Adresse,DE_Complement Complement,
+DE_Ville Ville, DE_Contact Contact,DE_Pays Pays,DE_Telephone Telephone, DE_Telecopie Telecopie , DE_Principal Pricipal from F_DEPOT 

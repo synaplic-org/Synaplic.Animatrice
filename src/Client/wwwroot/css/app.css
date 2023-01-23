@@ -1,0 +1,30 @@
+﻿.footerbar {
+    border-top: solid 2px #189d1d;
+    background: #f0f9f1 !important;
+}
+
+
+th.mud-table-cell {
+    background: #c7ebcd !important;
+    color: black !important;
+    padding: 8px 8px !important;
+    border-bottom: #726b6b solid;
+}
+
+.mud-dialog-title {
+    background: #43834e !important;
+    color: white !important;
+    padding: 10px 16px !important;
+}
+
+.mud-dialog-actions {
+    border-top: #43834e 3px solid;
+}
+
+.mud-dialog-content {
+    padding: 8px !important;
+}
+
+.mud-table-container {
+    border: solid 1px #c6dbc9;
+}

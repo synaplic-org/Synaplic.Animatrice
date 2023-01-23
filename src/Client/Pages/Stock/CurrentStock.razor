@@ -1,0 +1,106 @@
+﻿@page "/Logistics/Mobile/Stock/Current"
+@layout NoAppBarLayout
+
+<MudAppBar Elevation="5" Dense="true" Style="border-top: solid 2px #191919;">
+
+
+    <MudText Typo="Typo.h6" Class="ml-2">@Localizer["Etat de Stock :"] @GetDepotName(_depoID.ToString())</MudText>
+    
+    <MudSpacer/>
+    
+    <MudIconButton Disabled="_isLoading" 
+                   Icon="@Icons.TwoTone.Search" Size="Size.Medium" 
+                   Style="background-color: white;color: green;height:40px;width:40px" 
+                   Edge="Edge.Start"
+                   OnClick="Search"/>
+    
+</MudAppBar>
+<div style="margin-top: 50px"></div>
+
+
+@if (_isLoading)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+}
+else
+{
+    <MudButton Style="justify-content: space-between;background-color: darkslategray" FullWidth=@true 
+               Variant="Variant.Filled" EndIcon="@Icons.Filled.ExpandCircleDown" 
+               Color="Color.Primary" OnClick="@ToggleOpen">@Localizer["Filters"]</MudButton>
+    
+    <MudPaper Style="padding-bottom: 5px;margin-bottom: 5px;" Square=@true hidden=@(!_isOpen) Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <MudSelect Label="@Localizer["Dépôt "]" @bind-Value="_depoID" T="int">
+
+                @foreach (var site in _depotDtos)
+                {
+                    <MudSelectItem Value="@site.CodeDepot" T="int">@site.Intitule</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect T="string" @bind-Value="_familleFilter"
+                       Label="@Localizer["Famille"]" MultiSelection="true"
+                       SelectAll="true" SelectAllText="#TOUT#"
+                       AnchorOrigin="Origin.BottomCenter">
+                @foreach (var filtre in _familleDtos)
+                {
+                    <MudSelectItem T="string" Value="@filtre.CodeFamille">@filtre.Intitule</MudSelectItem>
+                }
+            </MudSelect>
+            <MudTextField   @bind-Value="_codeArticle" Label="@Localizer["Référence"]" />
+            <MudTextField   @bind-Value="_designiationArticle" Label="@Localizer["Designation"]" />
+        </div>
+    </MudPaper>
+    <div style="height:calc(100vh - 160px); overflow-y:scroll">
+
+
+        @if (_isLoading)
+        {
+            <div style="text-align: center;">
+                <MudProgressCircular Style="margin: 40px;" Color="Color.Primary" Indeterminate="true"/>
+            </div>
+        }
+        @foreach (var i in _stockDtos)
+        {
+            <MudPaper Elevation="3" class="pa-2 mt-1" Style="border-left: solid 4px darkslategray">
+                 <MudText Typo="Typo.subtitle2" style="color:#0a5291">
+                        @i.Designation
+                 </MudText>
+                 
+                <table style="width: 100%">
+                    <tr><td>
+                         <b>@Localizer["Code :"]</b> @i.Reference
+                    </td></tr>
+                    <tr><td>
+                         <b>@Localizer["Famille :"]</b> @GetFamillyName(i.CodeFamille) 
+                    </td></tr>
+                    <tr><td style="text-align: right">
+                        @if (i.QteStockDate < 0)
+                        {
+                            <b style="color:red"> Stock: @i.QteStockDate.ToString("N2")</b>
+                        }
+                        else
+                        {
+                             <b style="color:#9e39a7"> Stock: @i.QteStockDate.ToString("N2")</b>
+                        }
+                       
+                    </td></tr>
+                </table>
+                
+               
+            </MudPaper>
+            
+        }
+
+
+    </div>
+}
+
+<div style="margin-bottom: 53px"></div>
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Class="footerbar" Elevation="1">
+    <MudIconButton Icon="@Icons.Material.Filled.KeyboardReturn" Style="background-color: orange;color: white;height:40px;width:40px" Edge="Edge.Start"
+                   OnClick="@(Return)"/>
+
+    <MudSpacer/>
+
+
+</MudAppBar>

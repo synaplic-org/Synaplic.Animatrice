@@ -1,0 +1,48 @@
+﻿@using Microsoft.Extensions.Localization
+<MudDialog>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@ButtonCancelText</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+
+    [Parameter] public string ButtonText { get; set; }
+    
+    [Parameter] public string ButtonCancelText { get; set; } 
+
+    [Parameter] public Color Color { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Close(DialogResult.Ok(false));
+    
+    
+    
+    public static async Task<bool?> ShowDialogAsync(IDialogService dialogService,
+        string title, 
+        string confirmText, 
+        string buttonText, 
+        string buttonCancelText ="Annuler", 
+        Color color = Color.Secondary)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText",confirmText);
+        parameters.Add("ButtonText", buttonText);
+        parameters.Add("ButtonCancelText", buttonCancelText);
+        parameters.Add("Color", color);
+        var dialog = dialogService.Show<ConfirmationDialog>(title, parameters);
+        var result = await dialog.Result;
+        if (result.Cancelled) return  null;
+        return (bool) result.Data;
+    }
+
+
+     
+
+}

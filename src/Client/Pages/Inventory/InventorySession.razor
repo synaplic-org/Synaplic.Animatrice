@@ -1,0 +1,190 @@
+﻿@page "/Logistics/Invenotry/Sessions"
+@*@layout NoAppBarLayout*@
+
+
+<style>
+    .mud-table-container { overflow: auto; }
+
+    .mud-table-cell {
+        display: table-cell;
+        padding: 12px;
+        font-size: .75rem;
+        text-align: start;
+        font-weight: 600;
+        line-height: 1.2;     
+    }
+
+    .mud-toolbar { height: 48px; }
+
+    .mud-menu .mud-button { font-size: .75rem; }
+</style>
+
+<HeroTitle Title="@Localizer["Session"]" Description="@Localizer["Gérer la session"]"/>
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" @ref="_table" Items="_sessionList" Dense="@_dense" Bordered="@_bordered" Striped="@_striped"
+              Filter="new Func<SessionDTO, bool>(Search)"
+              @bind-session="_session"
+              Style="height:calc(100vh - 140px); overflow-y:auto">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                @if (_canCreateSession)
+                {
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal(0))" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@Localizer["Créer une Session"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetSessionAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@Localizer["Actualiser"]</MudButton>
+                }
+                else
+                {
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetSessionAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@Localizer["Actualiser"]</MudButton>
+                }
+            </div>
+            <MudSpacer/>
+            @if (_canSearchSession)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false Placeholder="@Localizer["Rechercher des Sessions"]" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Id)">@Localizer["Id"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Designation)">@Localizer["Designation"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.DateDebut)">@Localizer["Date Début"]</MudTableSortLabel>
+            </MudTh>
+            @*            <MudTh><MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.DateDebutPrevisionnel)">@Localizer["DateDebutPrevisionnel"]</MudTableSortLabel></MudTh>
+*@
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.DateFin)">@Localizer["Date Fin"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Status)">@Localizer["Status"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.DepotId)">@Localizer["Depot"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<SessionDTO, object>(x => x.Filtre)">@Localizer["Filtre"]</MudTableSortLabel>
+            </MudTh>
+            <MudTh Style="text-align: right">@Localizer["Actions"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">
+                @context.Id
+            </MudTd>
+            <MudTd DataLabel="Designation">
+                <MudHighlighter Text="@context.Designation" HighlightedText="@_searchString"/>
+            </MudTd>
+            <MudTd DataLabel="DateDebut">
+                @context.DateDebut.Value.GetDateTimeFormats()[0]
+            </MudTd>
+            @*<MudTd DataLabel="DateDebutPrevisionnel">
+                    @context.DateDebutPrevisionnel.GetDateTimeFormats()[0]
+                </MudTd>*@
+            <MudTd DataLabel="DateFin">
+                @context.DateFin.Value.GetDateTimeFormats()[0]
+            </MudTd>
+            <MudTd DataLabel="Status">
+                @switch (context.Status)
+                {
+                    case SessionStatus.Brouillon:
+                        <MudChip Size="Size.Small" Color="Color.Default">@Localizer["Brouillon"]</MudChip>
+                        break;
+                    case SessionStatus.Activee:
+                        <MudChip Size="Size.Small" Style="background: #48a5b2; color: white">@Localizer["Activée"]</MudChip>
+                        break;
+                    case SessionStatus.Encours:
+                        <MudChip Size="Size.Small" Style="background: #3785d0; color: white">@Localizer["En cours"]</MudChip>
+                        break;
+                    case SessionStatus.Terminee:
+                        <MudChip Size="Size.Small" Style="background: #5c32a2; color: white">@Localizer["Terminée"]</MudChip>
+                        break;
+                    case SessionStatus.Cloturee:
+                        <MudChip Size="Size.Small" Style="background: #36ad3d; color: white">@Localizer["Cloturée"]</MudChip>
+                        break;
+                    case SessionStatus.EnIntegration:
+                        <MudChip Size="Size.Small" Style="background: #a6582e; color: white">@Localizer["En integration"]</MudChip>
+                        break;
+                    case SessionStatus.Erreure:
+                        <MudChip Size="Size.Medium" Style="background: #e14c4c; color: white">@Localizer["Erreure"]</MudChip>
+                        break;
+                    case SessionStatus.Annulee:
+                        <MudChip Size="Size.Small" Style="background: #d5a13b; color: white">@Localizer["Annulée"]</MudChip>
+                        break;
+                    default:
+                        <MudChip Size="Size.Small" Style="background: #ffcd11; color: black">@Localizer["Inconnu"]</MudChip>
+                        break;
+                }
+
+            </MudTd>
+            <MudTd DataLabel="DepotId">
+                <MudHighlighter Text="@GetDepotName(context.DepotId)" HighlightedText="@_searchString"/>
+            </MudTd>
+            <MudTd DataLabel="@(context.FiltreList.Length.ToString() + " " + Localizer["Famille(s)"])" Style="text-align: center">
+
+
+                <MudMenu Label="@(context.FiltreList.Length.ToString() + " " + Localizer["Famille(s)"])"
+                         Variant="Variant.Outlined" MaxHeight="300" Color="Color.Secondary" FullWidth="true">
+                    @foreach (var ofiler in context.FiltreList)
+                    {
+                        <MudMenuItem>@ofiler</MudMenuItem>
+                    }
+                </MudMenu>
+            </MudTd>
+            <MudTd DataLabel="@Localizer["Actions"]" Style="text-align: right">
+
+                <MudButtonGroup Color="Color.Transparent" Variant="Variant.Outlined">
+                    @if (_canEditSession && context.Status <= SessionStatus.Brouillon)
+                    {
+                        <MudIconButton Title="Modifier" Icon="@Icons.Material.Filled.Edit" Color="@Color.Secondary"
+                                       @onclick="@(() => InvokeModal(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status == SessionStatus.Brouillon)
+                    {
+                        <MudIconButton Title="Activer" Icon="@Icons.Material.Filled.Check" Color="@Color.Primary"
+                                       @onclick="@(() => ActivateSession(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status == SessionStatus.Terminee)
+                    {
+                        <MudIconButton Title="Activer" Icon="@Icons.Material.Filled.LockOpen" Color="@Color.Primary"
+                                       @onclick="@(() => UnlockSession(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status == SessionStatus.Encours)
+                    {
+                        <MudIconButton Title="Terminer" Icon="@Icons.Material.Filled.Lock" Color="@Color.Dark"
+                                       @onclick="@(() => TerminerSession(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status >= SessionStatus.Encours && context.Status != SessionStatus.Annulee)
+                    {
+                        <MudIconButton Title="Liste des scans" Icon="@Icons.Material.Filled.QrCodeScanner" Color="@Color.Secondary"
+                                       @onclick="@(() => ShowScanDetails(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status >= SessionStatus.Terminee && context.Status != SessionStatus.Annulee)
+                    {
+                        <MudIconButton Title="Liste des écarts" Icon="@Icons.Material.Filled.Splitscreen"
+                                       Color="@Color.Info" @onclick="@(() => ShowEcartDetails(@context.Id))"/>
+                    }
+                    @if (_canEditSession && context.Status != SessionStatus.EnIntegration && context.Status != SessionStatus.Cloturee && context.Status != SessionStatus.Annulee)
+                    {
+                        <MudIconButton Title="Annuler" Icon="@Icons.Material.Filled.Cancel" Color="@Color.Warning"
+                                       @onclick="@(() => AnnulerSession(@context.Id))"/>
+                    }
+
+                </MudButtonGroup>
+
+
+            </MudTd>
+        </RowTemplate>
+
+        <PagerContent >
+            <MudTablePager    />@*
+            <MudPagination SelectedChanged="(i) => _table.NavigateTo(i - 1)" Count="@((_table.GetFilteredItemsCount() + _table.RowsPerPage - 1) / _table.RowsPerPage)" Class="pa-4" />*@
+        </PagerContent>
+    </MudTable>
+}

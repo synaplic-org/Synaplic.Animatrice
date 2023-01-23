@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Synaplic.Inventory.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Synaplic.Inventory.Server.Controllers.BaseApiController`1">
+            <summary>
+            Abstract BaseApi Controller Class
+            </summary>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.AccountController.UpdateProfile(Synaplic.Inventory.Transfer.Requests.Identity.UpdateProfileRequest)">
+            <summary>
+            Update Profile
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.AccountController.ChangePassword(Synaplic.Inventory.Transfer.Requests.Identity.ChangePasswordRequest)">
+            <summary>
+            Change Password
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.AccountController.GetProfilePictureAsync(System.String)">
+            <summary>
+            Get Profile picture by Id
+            </summary>
+            <param name="userId"></param>
+            <returns>Status 200 OK </returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.AccountController.UpdateProfilePictureAsync(Synaplic.Inventory.Transfer.Requests.Identity.UpdateProfilePictureRequest)">
+            <summary>
+            Update Profile Picture
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleClaimController.GetAll">
+            <summary>
+            Get All Role Claims(e.g. User Create Permission)
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleClaimController.GetAllByRoleId(System.String)">
+            <summary>
+            Get All Role Claims By Id
+            </summary>
+            <param name="roleId"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleClaimController.Post(Synaplic.Inventory.Transfer.Requests.Identity.RoleClaimRequest)">
+            <summary>
+            Add a Role Claim
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK </returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleClaimController.Delete(System.Int32)">
+            <summary>
+            Delete a Role Claim
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleController.GetAll">
+            <summary>
+            Get All Roles (basic, admin etc.)
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleController.Post(Synaplic.Inventory.Transfer.Requests.Identity.RoleRequest)">
+            <summary>
+            Add a Role
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleController.Delete(System.String)">
+            <summary>
+            Delete a Role
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleController.GetPermissionsByRoleId(System.String)">
+            <summary>
+            Get Permissions By Role Id
+            </summary>
+            <param name="roleId"></param>
+            <returns>Status 200 Ok</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.RoleController.Update(Synaplic.Inventory.Transfer.Requests.Identity.PermissionRequest)">
+            <summary>
+            Edit a Role Claim
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.TokenController.Get(Synaplic.Inventory.Transfer.Requests.Identity.TokenRequest)">
+            <summary>
+            Get Token (Email, Password)
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.TokenController.Refresh(Synaplic.Inventory.Transfer.Requests.Identity.RefreshTokenRequest)">
+            <summary>
+            Refresh Token
+            </summary>
+            <param name="model"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.GetAll">
+            <summary>
+            Get User Details
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.GetById(System.String)">
+            <summary>
+            Get User By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.GetRolesAsync(System.String)">
+            <summary>
+            Get User Roles By Id
+            </summary>
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.UpdateRolesAsync(Synaplic.Inventory.Transfer.Requests.Identity.UpdateUserRolesRequest)">
+            <summary>
+            Update Roles for User
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.RegisterAsync(Synaplic.Inventory.Transfer.Requests.Identity.RegisterRequest)">
+            <summary>
+            Register a User
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.ConfirmEmailAsync(System.String,System.String)">
+            <summary>
+            Confirm Email
+            </summary>
+            <param name="userId"></param>
+            <param name="code"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.ToggleUserStatusAsync(Synaplic.Inventory.Transfer.Requests.Identity.ToggleUserStatusRequest)">
+            <summary>
+            Toggle User Status (Activate and Deactivate)
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.ForgotPasswordAsync(Synaplic.Inventory.Transfer.Requests.Identity.ForgotPasswordRequest)">
+            <summary>
+            Forgot Password
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.ResetPasswordAsync(Synaplic.Inventory.Transfer.Requests.Identity.ResetPasswordRequest)">
+            <summary>
+            Reset Password
+            </summary>
+            <param name="request"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Identity.UserController.Export(System.String)">
+            <summary>
+            Export to Excel
+            </summary>
+            <param name="searchString"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Utilities.AuditsController.GetUserTrailsAsync">
+            <summary>
+            Get Current User Audit Trails
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Utilities.AuditsController.ExportExcel(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Search Audit Trails and Export to Excel
+            </summary>
+            <param name="searchString"></param>
+            <param name="searchInOldValues"></param>
+            <param name="searchInNewValues"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.Utilities.PreferencesController.ChangeLanguageAsync(System.String)">
+            <summary>
+            Change Language Preference
+            </summary>
+            <param name="languageCode"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.Save(Synaplic.Inventory.Transfer.Models.SessionDTO)">
+            <summary>
+            Add session
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.Delete(System.Int32)">
+            <summary>
+            Delete session
+            </summary> s
+            <param name="id"></param>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetById(System.Int32)">
+            <summary>
+            Get session
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetAll">
+            <summary>
+            Get All Sessions
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.Inventory.InventorySessionController.GetByStatus(Synaplic.Inventory.Shared.Enums.SessionStatus)">
+            <summary>
+            Get All Sessions
+            </summary>
+            <returns>Status 200 OK</returns>
+        </member>
+        <member name="M:Synaplic.Inventory.Server.Controllers.v1.SageController.GetAllDepots">
+            <summary>
+            Get Dashboard Data
+            </summary>
+            <returns>Status 200 OK </returns>
+        </member>
+    </members>
+</doc>
